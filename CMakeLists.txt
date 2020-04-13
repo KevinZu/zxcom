@@ -18,4 +18,4 @@ add_subdirectory(src)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
 
 ADD_EXECUTABLE(main ${DIR_SRCS})
-TARGET_LINK_LIBRARIES( main ucom pthread)
+TARGET_LINK_LIBRARIES( main  lcom ucom pthread)
