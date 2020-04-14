@@ -23,9 +23,10 @@
 
 
 
-#define GET_DIR(x)			((x & 0xC000) >> 14)
-#define GET_MSG_TYPE(x)		((x & 0x3800) >> 11)
-#define GET_MSG_ID(x)		(x & 0x00ff)
+#define GET_DIR(x)					((x & 0xC000) >> 14)
+#define GET_MSG_TYPE(x)				((x & 0x3800) >> 11)
+#define GET_MSG_ID(x)				(x & 0x00ff)
+#define SET_CTRL_INFO(dir,type,id)	((dir << 14) | (type << 11) | id)
 
 #define DIR_REQUEST          0
 #define DIR_RESPONSE         1
@@ -67,7 +68,6 @@ typedef struct {
 	char *res;
 }handler_param_t;
 
-int OnPacketRecv(const char *pack,const int len);
 
 
 #endif

@@ -4,7 +4,7 @@
 
 
 
-int OnPacketRecv(const char *pack,const int len)
+int ZxcomOnPacket(const char *pack,const int len)
 {
 	int ret;
 	unsigned int datalen;
@@ -47,6 +47,25 @@ int OnPacketRecv(const char *pack,const int len)
 
 			}
 		}
+	}
+
+	return 0;
+}
+
+int ZxcomOnSendMsg(COMMAND_ID_TYPE cmdId,const char *param,const unsigned int paramLen,char *packet)
+{
+	int i,ret;
+	
+	packet_t *pk = (packet_t *)packet;
+	pk->ctrlInfo = SET_CTRL_INFO(DIR_REQUEST, MSG_TYPE_ASYNC,cmdId);
+
+	for(i = 0;i < paramLen;i ++) {
+		pk->data[i] = param[i];
+	}
+
+	ret = CommSaveMsg(cmdId,param,paramLen);
+	if(ret != 0) {
+		return ret;
 	}
 
 	return 0;

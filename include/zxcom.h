@@ -12,15 +12,14 @@
 //////////////////////////////// handler /////////////////////////////////////////
 typedef int (*command_handler_t)(void *para);
 //////////////////////////////// callback ////////////////////////////////////////
-int BuildRequest(const char *packet,const int packLen,char *req,unsigned int* pLen);
-int SendRequest(const char *req,const int len);
+
 /////////////////////////////////////////// API //////////////////////////////////
 
 int ZxcomInit();
 int ZxcomDeInit();
 
-int ZxcomOnPacket(const int len,const char* data);
-
+int ZxcomOnPacket(const char *pack,const int len);
+int ZxcomOnSendMsg(COMMAND_ID_TYPE cmdId,const char *param,const unsigned int paramLen,char *packet);  //when send async message,call it
 
 #endif
 

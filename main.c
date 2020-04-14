@@ -27,19 +27,6 @@ int CRITICAL_DEINIT()
 }
 
 
-int SendRequest(const char *req,const int len)
-{
-	printf("req: %s  len:%d\n",req,len);
-	return 0;
-}
-
-
-int BuildRequest(const char *packet,const int packLen,char *req,unsigned int* pLen)
-{
-	
-	return 0;
-}
-
 
 int main()
 {

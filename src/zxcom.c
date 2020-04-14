@@ -32,9 +32,6 @@ int ZxcomDeInit()
 
 
 
-int ZxcomOnPacket(const int len,const char* data)
-{
-	return OnPacketRecv(data,len);
-}
+
 
 
