@@ -8,7 +8,7 @@ MESSAGE(STATUS "src_list:" ${SRC_LIST_CPP} ${SRC_LIST_C})
 
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/lib)
 
-ADD_LIBRARY(lcom SHARED ${SRC_LIST_CPP} ${SRC_LIST_C})
+ADD_LIBRARY(zxcom SHARED ${SRC_LIST_CPP} ${SRC_LIST_C})
 
 AUX_SOURCE_DIRECTORY(. DIR_SRCS)
 include_directories(src)
@@ -18,4 +18,4 @@ add_subdirectory(src)
 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
 
 ADD_EXECUTABLE(main ${DIR_SRCS})
-TARGET_LINK_LIBRARIES( main  lcom ucom pthread)
+TARGET_LINK_LIBRARIES( main  zxcom ucom pthread)

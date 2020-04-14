@@ -17,10 +17,22 @@
 
 #else
 
-	#define PACKED __attribute((packed))__
+	#define PACKED  __attribute__((packed))
 
 #endif
 
+
+
+#define GET_DIR(x)			((x & 0xC000) >> 14)
+#define GET_MSG_TYPE(x)		((x & 0x3800) >> 11)
+#define GET_MSG_ID(x)		(x & 0x00ff)
+
+#define DIR_REQUEST          0
+#define DIR_RESPONSE         1
+
+#define MSG_TYPE_SYNC        0
+#define MSG_TYPE_ASYNC       2
+#define MSG_TYPE_BROADCAST   1
 
 //	ctrlInfo:
 //		dir(2bit):			00---request;01---response
@@ -30,11 +42,15 @@
 
 struct packet_content{
 	CTRL_INFO_TYPE ctrlInfo;
-	char data[];
-} PACKED;
+	char data[PACKET_DATA_SIZE];
+}PACKED;
 
 
-typedef struct packet_content packet_t;
+
+struct cmd_content {
+	COMMAND_ID_TYPE cmd_id;
+	char param[PACKET_DATA_SIZE - sizeof(COMMAND_ID_TYPE)];
+}PACKED;
 
 
 #ifdef _MSC_VER
@@ -43,6 +59,15 @@ typedef struct packet_content packet_t;
 
 #endif
 
+typedef struct packet_content packet_t;
+typedef struct cmd_content cmd_content_t;
+
+typedef struct {
+	char *req;
+	char *res;
+}handler_param_t;
+
+int OnPacketRecv(const char *pack,const int len);
 
 
 #endif

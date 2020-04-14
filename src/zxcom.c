@@ -1,9 +1,27 @@
 #include "zxcom.h"
 #include "command.h"
+#include "packet.h"
+#include "ucomlib.h"
 
+/////////////////////////////////// UCOM CALLBACK /////////////////////////////////
+int handler(const int event,const int msgId)
+{
+	switch (event) {
+		case EV_TIMEOUT:
+			DEBUG("ev_timeout\n");
+			break;
+		default:
+			DEBUG("undefine event");
+			break;	
+	}
+}
+
+
+///////////////////////////////////// API /////////////////////////////////////////
 int ZxcomInit()
 {
 	g_command_manager.init();
+	CommuInit();
 	return 0;
 }
 
@@ -13,14 +31,10 @@ int ZxcomDeInit()
 }
 
 
+
 int ZxcomOnPacket(const int len,const char* data)
 {
-
-	return 0;
+	return OnPacketRecv(data,len);
 }
 
-int ZxcomSendCommand(const char *cmd,const int len)
-{
-	return 0;
-}
 
