@@ -4,7 +4,7 @@
 
 int main()
 {
-	LocalCommInit();
+	ZxcomInit();
 	
 	return 0;
 }

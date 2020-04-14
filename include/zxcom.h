@@ -17,7 +17,7 @@ typedef int (*command_handler_t)(void *para);
 int ZxcomInit();
 int ZxcomDeInit();
 
-int ZxcomOnPacket(const int len,char* data);
+int ZxcomOnPacket(const int len,const char* data);
 int ZxcomSendCommand(const char *cmd,const int len);
 
 
