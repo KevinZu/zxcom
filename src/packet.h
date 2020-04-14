@@ -1,7 +1,7 @@
 #ifndef __PACKET_H__
 #define __PACKET_H__
 
-#include "local_comm.h"
+#include "zxcom.h"
 
 #define CTRL_INFO_TYPE unsigned int
 #define PACKET_DATA_SIZE 10
@@ -30,7 +30,7 @@
 
 struct packet_content{
 	CTRL_INFO_TYPE ctrlInfo;
-	char data[]
+	char data[];
 } PACKED;
 
 

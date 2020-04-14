@@ -1,5 +1,5 @@
 
-#include "local_comm.h"
+#include "zxcom.h"
 
 
 int main()
