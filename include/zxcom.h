@@ -18,8 +18,13 @@ typedef int (*command_handler_t)(void *para);
 int ZxcomInit();
 int ZxcomDeInit();
 
+int ZxcomAddCommand(COMMAND_ID_TYPE id,command_handler_t handler);
+
+
 int ZxcomOnPacket(const char *pack,const int len);
 int ZxcomOnSendMsg(COMMAND_ID_TYPE cmdId,const char *param,const unsigned int paramLen,char *packet);  //when send async message,call it
+int ZxcomOnSendResponse(COMMAND_ID_TYPE cmdId,const char *param,const unsigned int paramLen,char *packet);
+
 
 #endif
 

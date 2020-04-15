@@ -71,5 +71,20 @@ int ZxcomOnSendMsg(COMMAND_ID_TYPE cmdId,const char *param,const unsigned int pa
 	return 0;
 }
 
+int ZxcomOnSendResponse(COMMAND_ID_TYPE cmdId,const char *param,const unsigned int paramLen,char *packet)
+{
+	int i,ret;
+	
+	packet_t *pk = (packet_t *)packet;
+	pk->ctrlInfo = SET_CTRL_INFO(DIR_RESPONSE, MSG_TYPE_ASYNC,cmdId);
+
+	for(i = 0;i < paramLen;i ++) {
+		pk->data[i] = param[i];
+	}
+
+	return 0;
+}
+
+
 
 
