@@ -19,6 +19,8 @@ int ZxcomInit();
 int ZxcomDeInit();
 
 int ZxcomAddCommand(COMMAND_ID_TYPE id,command_handler_t handler);
+int ZxcomAddResponse(COMMAND_ID_TYPE id,command_handler_t handler);
+
 
 
 int ZxcomOnPacket(const char *pack,const int len);

@@ -36,6 +36,11 @@ int ZxcomAddCommand(COMMAND_ID_TYPE id,command_handler_t handler)
 	return g_command_manager.add_command(id,handler);
 }
 
+int ZxcomAddResponse(COMMAND_ID_TYPE id,command_handler_t handler)
+{
+	return g_command_manager.add_response(id,handler);
+}
+
 
 
 

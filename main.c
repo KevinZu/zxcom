@@ -86,10 +86,13 @@ void *thread_run2(void* arg)
 		        (struct sockaddr*)&remote_un, &addre_len);
 		if (ret == -1) {
 			perror("error when recvfrom, ");
+			continue;
 			
 		}
 		ZxcomOnPacket(buf,ret);
-		printf("ret:%d, %s\n", ret,buf);
+
+		buf[ret] = 0;
+		printf("ret:%d, contrl:0x%x    %s\n", ret,*(int*)buf,buf+4);
 		usleep(500000);
 	}   
 
@@ -119,6 +122,13 @@ int cmd1_handler(void *param)
 	}
 }
 
+
+int response1_handler(void *param)
+{
+	printf("response handler param: %s\n",(char*)param);
+}
+
+
 int main(int argc, char **argv)
 {
 	int ret;
@@ -132,7 +142,7 @@ int main(int argc, char **argv)
 	
 	ZxcomInit();
 	ZxcomAddCommand(1,cmd1_handler);
-	ZxcomAddCommand(2,cmd1_handler);
+	ZxcomAddResponse(1,response1_handler);
 
 	socket_fd = socket(AF_UNIX, SOCK_DGRAM, 0);
 	if (socket_fd < 0) {

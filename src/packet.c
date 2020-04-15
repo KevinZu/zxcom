@@ -37,14 +37,13 @@ int ZxcomOnPacket(const char *pack,const int len)
 			param.req = req;
 			param.res = packet->data;
 
-			command_handler_t handler = g_command_manager.get_command(cmd_id);
+			command_handler_t handler = g_command_manager.get_response(cmd_id);
 			if(handler == NULL){
 				return ERR_CMD_NOT_EXIST;
 			}
-
+			
 			ret = handler(&param);
 			if(ret != 0) {
-
 			}
 		}
 	}
