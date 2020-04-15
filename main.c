@@ -12,7 +12,9 @@
 #include <stdlib.h>
 pthread_mutex_t g_mutex;
 
-int socket_fd = -1;
+int socket_send_fd = -1;
+int socket_recv_fd = -1;
+
 
 char * server_filename = "/tmp/socket-server";
 char * client_filename = "/tmp/socket-client";
@@ -47,13 +49,18 @@ void *thread_timer(void* arg)
 	}
 }
 
-struct sockaddr_un srv_un = {0};
+struct sockaddr_un srv_un_s = {0};
+struct sockaddr_un srv_un_c = {0};
 
 void *thread_run1(void* arg)
 {
-	char packet[100];
+	int ret;
+	char packet[100],buf[100];
+	socklen_t addre_len;
 	int socketfd = *(int *)arg;
 	char *param = "hello";
+	struct sockaddr_un srv_un = {0};	
+	struct sockaddr_un remote_un = {0};	
 
 	while (1) {
 		sleep(2); 
@@ -65,9 +72,20 @@ void *thread_run1(void* arg)
 			socketfd = -1;
 			pthread_exit(NULL);
 		}
+
+		memset(buf, 0, sizeof(buf));
+		ret = recvfrom(socket_send_fd, buf, sizeof(buf), 0,
+		        (struct sockaddr*)&remote_un, &addre_len);
+		if (ret == -1) {
+			perror("error when recvfrom, ");
+			continue;
+			
+		}
+		ZxcomOnPacket(buf,ret);
+
+		buf[ret] = 0;
+		printf("cli ret:%d, contrl:0x%x    %s\n", ret,*(int*)buf,buf+4);
 	}
-	printf("Sent successfully.\n");
-	close(socketfd);
 }
 
 
@@ -77,12 +95,12 @@ void *thread_run2(void* arg)
 	int i =0;
 	socklen_t addre_len;
 	struct sockaddr_un remote_un = {0};	
-	char buf[1024] = {0};
-	int socket_fd = *(int *)arg;
+	char buf[100] = {0};
+	int socket_send_fd = *(int *)arg;
 	for(;;) {
 		++i;
 		memset(buf, 0, sizeof(buf));
-		ret = recvfrom(socket_fd, buf, sizeof(buf), 0,
+		ret = recvfrom(socket_recv_fd, buf, sizeof(buf), 0,
 		        (struct sockaddr*)&remote_un, &addre_len);
 		if (ret == -1) {
 			perror("error when recvfrom, ");
@@ -96,8 +114,8 @@ void *thread_run2(void* arg)
 		usleep(500000);
 	}   
 
-	close(socket_fd);
-	socket_fd = -1;
+	//close(socket_send_fd);
+	//socket_send_fd = -1;
 }
 
 
@@ -105,19 +123,20 @@ void *thread_run2(void* arg)
 int cmd1_handler(void *param)
 {
 	printf("handler param: %s\n",(char*)param);
+	struct sockaddr_un srv_un = {0};
 	char *res = "go away";
 	char packet[100];
 	ZxcomOnSendResponse(1,res, strlen(res), packet);
 
-	if(socket_fd < 0) {
+	if(socket_send_fd < 0) {
 		return -1;
 	}
 
-	if (sendto(socket_fd,packet,strlen(res) + 4, 0,
+	if (sendto(socket_send_fd,packet,strlen(res) + 4, 0,
 			(struct sockaddr *)&srv_un, sizeof(srv_un)) == -1) {
 			perror("send");
-			close(socket_fd);
-			socket_fd = -1;
+			close(socket_send_fd);
+			socket_send_fd = -1;
 			pthread_exit(NULL);
 	}
 }
@@ -136,16 +155,22 @@ int main(int argc, char **argv)
 	pthread_t tid_timer,tid_run1,tid_run2;
 
 	char obuf[100];
-	struct sockaddr_un cli_un = { 0 };
-	srv_un.sun_family = AF_UNIX;
-	strncpy(srv_un.sun_path, server_filename, sizeof(srv_un.sun_path));
+	//struct sockaddr_un srv_un_c = { 0 };
+	srv_un_s.sun_family = AF_UNIX;
+	strncpy(srv_un_s.sun_path, server_filename, sizeof(srv_un_s.sun_path));
+
 	
 	ZxcomInit();
 	ZxcomAddCommand(1,cmd1_handler);
 	ZxcomAddResponse(1,response1_handler);
 
-	socket_fd = socket(AF_UNIX, SOCK_DGRAM, 0);
-	if (socket_fd < 0) {
+	socket_send_fd = socket(AF_UNIX, SOCK_DGRAM, 0);
+	if (socket_send_fd < 0) {
+		printf("socket error %s errno: %d\n", strerror(errno), errno);
+	}
+
+	socket_recv_fd = socket(AF_UNIX, SOCK_DGRAM, 0);
+	if (socket_recv_fd < 0) {
 		printf("socket error %s errno: %d\n", strerror(errno), errno);
 	}
 	
@@ -154,25 +179,25 @@ int main(int argc, char **argv)
 	if (argc > 1)
 		mode = argv[1][0];
 	if (mode == 's'){
-		unlink(srv_un.sun_path);
+		unlink(srv_un_s.sun_path);
 
-		if (bind(socket_fd, (struct sockaddr *)&srv_un, sizeof(srv_un)) == -1) {
+		if (bind(socket_send_fd, (struct sockaddr *)&srv_un_s, sizeof(srv_un_s)) == -1) {
 			printf("bind server err");
 			exit(1);
 		}
 
-		pthread_create(&tid_run2,NULL,thread_run2,&socket_fd);
+		pthread_create(&tid_run2,NULL,thread_run2,&socket_send_fd);
 	} else {
-		cli_un.sun_family = AF_UNIX;
-		strncpy(cli_un.sun_path, client_filename, sizeof(cli_un.sun_path));
-		unlink(cli_un.sun_path);
+		srv_un_c.sun_family = AF_UNIX;
+		strncpy(srv_un_c.sun_path, client_filename, sizeof(srv_un_c.sun_path));
+		unlink(srv_un_c.sun_path);
 		
-		if (bind(socket_fd, (struct sockaddr *)&cli_un, sizeof(cli_un)) == -1) {
+		if (bind(socket_recv_fd, (struct sockaddr *)&srv_un_c, sizeof(srv_un_c)) == -1) {
 			perror("bind client");
 			exit(1);
 		}
 		
-		pthread_create(&tid_run1,NULL,thread_run1,&socket_fd);
+		pthread_create(&tid_run1,NULL,thread_run1,&socket_recv_fd);
 	}
 
 	pthread_create(&tid_timer,NULL,thread_timer,NULL);
