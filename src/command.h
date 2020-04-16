@@ -14,7 +14,7 @@ typedef struct {
 
 typedef struct  {
 	command_t commands[COMMAND_TOTAL_NUMBER];
-	command_t response[COMMAND_TOTAL_NUMBER];
+	command_t response[RESPONSE_TOTAL_NUMBER];
 	unsigned int current_command_number;
 	unsigned int current_response_number;
 
