@@ -6,7 +6,8 @@
 #define ERR_CMD_NOT_EXIST                -11
 
 /////////////////////////////// command //////////////////////////////////////////
-#define COMMAND_TOTAL_NUMBER 5
+#define COMMAND_TOTAL_NUMBER 2
+#define RESPONSE_TOTAL_NUMBER 2
 #define COMMAND_ID_TYPE unsigned short
 
 //////////////////////////////// handler /////////////////////////////////////////

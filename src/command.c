@@ -23,7 +23,7 @@ static int AddCommand(COMMAND_ID_TYPE id,command_handler_t handler)
 
 static int AddResponse(COMMAND_ID_TYPE id,command_handler_t handler)
 {
-	if(g_command_manager.current_response_number >= COMMAND_TOTAL_NUMBER) {
+	if(g_command_manager.current_response_number >= RESPONSE_TOTAL_NUMBER) {
 		return ERR_CMD_NUM_OVERFLOW;
 	}
 
@@ -52,7 +52,7 @@ static command_handler_t GetCommand(COMMAND_ID_TYPE id)
 static command_handler_t GetResponse(COMMAND_ID_TYPE id)
 {
 	int i;
-	for(i = 0;i < COMMAND_TOTAL_NUMBER;i ++) {
+	for(i = 0;i < RESPONSE_TOTAL_NUMBER;i ++) {
 		if(g_command_manager.response[i].id == id) {
 			return g_command_manager.response[i].handler;
 		}

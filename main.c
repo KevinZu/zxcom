@@ -171,12 +171,7 @@ int main(int argc, char **argv)
 	strncpy(srv_un_c.sun_path, client_filename, sizeof(srv_un_c.sun_path));
 
 	srv_un_s.sun_family = AF_UNIX;
-	strncpy(srv_un_s.sun_path, server_filename, sizeof(srv_un_s.sun_path));
-
-	
-
-	
-	
+	strncpy(srv_un_s.sun_path, server_filename, sizeof(srv_un_s.sun_path));		
 
 	char mode = 's';
 	if (argc > 1)
