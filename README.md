@@ -51,5 +51,40 @@ cmdId	param	paramLen	packet
 这个接口输入命令Id，响应参数，参数长度，返回应答包，用户只需将得到的packet发送到命令发送方即可。
 ```
 
+### 1.4 超时处理功能
+超时处理功能需要用户实现超时处理函数，然后调用接口：
+```
+int CommSetEventHandler(EVENT_HANDLER ev)
+```
+进行添加。
+
+
+### 1.5 需要用户实现的回调函数
+#### 1.  事件（超时）处理函数
+      函数类型为：typedef int (*EVENT_HANDLER)(const int event,const int msgId)
+      
+#### 2.  互斥锁
+```
+int CRITICAL_INIT();
+void ENTER_CRITICAL();
+void EXIT_CRITICAL();
+int CRITICAL_DEINIT();
+```
+在MCU中可以用关中断和开中断实现，linux下用线程锁pthread_mutex_t。
+
+#### 3. 命令（应答）处理函数:
+```
+     函数类型：typedef int (*command_handler_t)(void *para)。
+```
+
+## 2．应用实例：
+这里使用unix套接字模拟命令的发送和接收端，简单示范了本框架的使用。
+代码：
+```
+main.c
+```
+
+
+
 本项目依赖库：[ucomlib](https://github.com/smtp-http/ucomlib.git)
 
