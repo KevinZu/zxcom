@@ -45,3 +45,6 @@ cmdId	param	paramLen	packet
 命令ID	命令参数	参数长度	命令包
 这个接口输入命令Id，响应参数，参数长度，返回应答包，用户只需将得到的packet发送到命令发送方即可。
 
+
+本项目依赖库：[ucomlib](https://github.com/smtp-http/ucomlib.git)
+
