@@ -80,9 +80,9 @@ int CRITICAL_DEINIT();
 ## 2．应用实例：
 这里使用unix套接字模拟命令的发送和接收端，简单示范了本框架的使用。
 代码：
-```
-    [main.c](https://github.com/KevinZu/zxcom/blob/master/main.c)
-```
+
+[main.c](https://github.com/KevinZu/zxcom/blob/master/main.c)
+
 
 ## 3. 构建方法：
 
