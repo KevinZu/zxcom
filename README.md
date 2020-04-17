@@ -81,9 +81,24 @@ int CRITICAL_DEINIT();
 这里使用unix套接字模拟命令的发送和接收端，简单示范了本框架的使用。
 代码：
 ```
-main.c
+    [main.c](https://github.com/KevinZu/zxcom/blob/master/main.c)
 ```
 
+## 3. 构建方法：
+
+```
+git clone https://github.com/KevinZu/zxcom.git
+
+cd zxcom
+
+mkdir build
+
+cd build
+
+cmake ..
+
+make
+```
 
 
 本项目依赖库：[ucomlib](https://github.com/smtp-http/ucomlib.git)
