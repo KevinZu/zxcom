@@ -83,6 +83,14 @@ int CRITICAL_DEINIT();
 
 [main.c](https://github.com/KevinZu/zxcom/blob/master/main.c)
 
+运行服务端：
+```
+./main
+```
+运行客户端：
+```
+./main c
+```
 
 ## 3. 构建方法：
 
