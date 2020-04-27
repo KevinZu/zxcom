@@ -129,8 +129,9 @@ int cmd1_handler(void *param)   //server
 	printf("handler param: %s\n",(char*)param);
 	//struct sockaddr_un srv_un = {0};
 	char *res = "go away";
+	
 	char packet[100];
-	ZxcomOnSendResponse(1,res, strlen(res), packet);
+	ZxcomOnSendResponse(param,res, strlen(res), packet);
 
 	if(server_fd < 0) {
 		return -1;

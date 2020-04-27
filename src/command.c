@@ -1,7 +1,10 @@
 #include "command.h"
 
+
+extern unsigned int g_cur_msgid;
 static int Init()
 {
+	g_cur_msgid = 0;
 	g_command_manager.current_command_number = 0;
 	return 0;
 }
