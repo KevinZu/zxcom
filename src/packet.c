@@ -48,8 +48,11 @@ int ZxcomOnPacket(const char *pack,const int len)
 			if(ret != 0) {
 				return ret;
 			}
-			param.req = req;
-			param.res = packet->data;
+
+			packet_t *pk = (packet_t *)req;
+			cmd_content_t *cmd = (cmd_content_t *)pk->data;
+			param.req = cmd->param;
+			param.res = packet->data + sizeof(COMMAND_ID_TYPE);
 
 			command_handler_t handler = g_command_manager.get_response(content->cmd_id);
 			if(handler == NULL){
