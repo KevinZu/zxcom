@@ -149,7 +149,8 @@ int cmd1_handler(void *param)   //server
 
 int response1_handler(void *param)
 {
-	printf("response handler param: %s\n",(char*)param);
+	response_param_t *res_p = (response_param_t *)param;
+	printf("response handler param-req: %s   param-res:%s\n",res_p->req,res_p->res);
 }
 
 
