@@ -23,10 +23,10 @@
 
 
 
-#define GET_DIR(x)					((x & 0xC000) >> 14)
-#define GET_MSG_TYPE(x)				((x & 0x3800) >> 11)
-#define GET_MSG_ID(x)				(x & 0x00ff)
-#define SET_CTRL_INFO(dir,type,id)	((dir << 14) | (type << 11) | id)
+#define GET_DIR(x)					((x & 0xC0000000) >> 30)
+#define GET_MSG_TYPE(x)				((x & 0x38000000) >> 27)
+#define GET_MSG_ID(x)				(x & 0x00ffffff)
+#define SET_CTRL_INFO(dir,type,id)	((dir << 30) | (type << 27) | id)
 
 #define DIR_REQUEST          0
 #define DIR_RESPONSE         1
@@ -39,7 +39,7 @@
 //		dir(2bit):			00---request;01---response
 //		msg type(3bit):		000---sync;010---async;001---broadcast
 //		reserved(3bit):
-//		message id(16bit):
+//		message id(24bit):
 
 struct packet_content{
 	CTRL_INFO_TYPE ctrlInfo;
@@ -68,7 +68,7 @@ typedef struct {
 	char *res;
 }handler_param_t;
 
-
+#define offsetof(TYPE, MEMBER) ((unsigned int) &((TYPE *)0)->MEMBER)
 
 #endif
 
